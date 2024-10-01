@@ -1,0 +1,11 @@
+Explanation
+
+Form Submission Handling:
+The form's submit event is intercepted using JavaScript to prevent the default form submission behavior.
+The form data is collected from the input fields.
+The collected data is stored in the browser's local storage.
+
+Download Button:
+A separate button (Download All Data) is provided to download all the collected data.
+When this button is clicked, the data is retrieved from local storage, formatted into a CSV string, and a download link is created and clicked programmatically.
+This approach allows users to submit multiple student entries and download all the collected data as a single CSV file.

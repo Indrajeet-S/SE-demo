@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Student Information Form</h1>
-    <form action="/submit" method="post">
+    <form id="studentForm">
         <label for="name">Student Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -25,5 +25,51 @@
 
         <button type="submit">Submit</button>
     </form>
+
+    <button id="downloadData">Download All Data</button>
+
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const mis = document.getElementById('mis').value;
+            const college = document.getElementById('college').value;
+            const age = document.getElementById('age').value;
+            const contact = document.getElementById('contact').value;
+
+            const studentData = { name, mis, college, age, contact };
+
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            students.push(studentData);
+            localStorage.setItem('students', JSON.stringify(students));
+
+            alert('Student data submitted successfully!');
+        });
+
+        document.getElementById('downloadData').addEventListener('click', function() {
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            if (students.length === 0) {
+                alert('No data to download.');
+                return;
+            }
+
+            const data = [
+                ['Name', 'MIS', 'College', 'Age', 'Contact'],
+                ...students.map(student => [student.name, student.mis, student.college, student.age, student.contact])
+            ];
+
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + data.map(e => e.join(",")).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "students_data.csv");
+            document.body.appendChild(link);
+
+            link.click();
+        });
+    </script>
 </body>
 </html>
